@@ -3,8 +3,6 @@ import com.baidu.www.mplus.mapper.EmployeeMapper;
 import com.baomidou.mybatisplus.core.conditions.Condition;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -12,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,7 +145,22 @@ public class TestWrapper {
 //        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().orderBy(true, false, "age"));
 
 //          30、or或者
-        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().eq("id","25").or().eq("gender","1"));
+//        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().eq("id","25").or().eq("gender","1"));
+
+//        31、升序orderByAsc
+
+//        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().orderByAsc(true,"age"));
+
+
+//           32、降序orderByDesc
+//        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().orderByDesc(true,"age"));
+
+
+//            33、回显字段设置
+//            SELECT last_Name,email FROM tbl_employee
+        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().select("last_Name,email"));
+
+
 
         if (!employeeList.isEmpty()) {
             logger.info("++条件构造器查询员工信息+++++" + gson.toJson(employeeList));
@@ -176,6 +188,49 @@ public class TestWrapper {
         }
 
     }
+
+    /**
+     * 修改条件构造器
+     * @throws SQLException
+     */
+    @Test
+    public void selectUpdate() throws SQLException {
+
+        Employee employee = new Employee();
+        employee.setGender(1);
+
+        // 添加过滤条件
+        Integer result = employeeMapper.update(employee,new UpdateWrapper<>());
+
+
+        if (result>0) {
+            logger.info("++ 更新成功+++++" + result);
+        }
+
+    }
+
+
+    /**
+     * 删除条件
+     * @throws SQLException
+     */
+    @Test
+    public void deleted() throws SQLException {
+
+
+        Employee employee = new Employee();
+        employee.setId(1);
+
+        // 删除过滤条件
+        Integer result = employeeMapper.delete(new QueryWrapper<>());
+
+        if (result>0) {
+            logger.info("++ 删除成功+++++" + result);
+        }
+
+    }
+
+
 
 
 }
